@@ -1,3 +1,8 @@
+DROP TRIGGER tr_ad_clientes;
+DROP PACKAGE pq_api_clientes;
+DROP SEQUENCE sq_ad_clientes;
+DROP TABLE tb_ad_clientes purge;
+
 CREATE TABLE tb_ad_clientes
 (
   cliente_id          NUMBER not null,

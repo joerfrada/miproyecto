@@ -45,7 +45,7 @@ public class ClienteManager implements IClienteManager {
             }
 		}
 		catch (Exception ex) {
-            throw new Exception("Cliente - findAll: " + ex.getMessage());
+            throw new Exception("ClienteManager - getClientes: " + ex.getMessage());
         }
 		
 		return lstClientes;
@@ -77,7 +77,7 @@ public class ClienteManager implements IClienteManager {
             }
 		}
 		catch (Exception ex) {
-            throw new Exception("Cliente - findById: " + ex.getMessage());
+            throw new Exception("ClienteManager - getClientesById: " + ex.getMessage());
         }
 		
 		return lstClientes;
@@ -103,7 +103,7 @@ public class ClienteManager implements IClienteManager {
 			res = stmt.getInt(2);
 		}
 		catch (Exception ex) {
-			throw new Exception("Cliente - crudClientes: " + ex.getMessage());
+			throw new Exception("ClienteManager - crudClientes: " + ex.getMessage());
 		}
 		
 		return res;

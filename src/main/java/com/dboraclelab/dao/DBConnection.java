@@ -3,18 +3,20 @@ package com.dboraclelab.dao;
 import java.sql.*;
 
 public class DBConnection {
-	private String username;
+	
+    private String url;
+    private String username;
     private String password;
-    private String url = null;
     
     public DBConnection() {
-    	this.url = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST = 192.168.211.180)(PORT = 1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=pdb1)))";
+    	this.url = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.211.180)(PORT = 1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=pdb1)))";
     	this.username = "personal";
     	this.password = "oracle";
     }
     
     private Connection getConnection() throws Exception {
         Connection conn = null;
+    	
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             
@@ -25,10 +27,10 @@ public class DBConnection {
             }
         }
         catch (ClassNotFoundException ex) {
-            throw new Exception("ClassNotFoundException: " + ex.getMessage());
+            throw new Exception("DBConnection - ClassNotFoundException: " + ex.getMessage());
         }
         catch (SQLException ex) {
-            throw new Exception("SQLException: " + ex.getMessage());
+            throw new Exception("DBConnection - SQLException: " + ex.getMessage());
         }
         
         return conn;
@@ -45,7 +47,7 @@ public class DBConnection {
             callStmt = conn.prepareCall(psql);
         }
         catch (Exception ex) {
-            throw new Exception("ExecuteProcedure: " + ex.getMessage());
+            throw new Exception("DBConnection - ExecuteProcedure: " + ex.getMessage());
         }
         
         return callStmt;
