@@ -2,16 +2,18 @@ package com.dboraclelab.dao;
 
 import java.sql.*;
 
+import com.dboraclelab.configuration.ConfigProperties;
+
 public class DBConnection {
-	
+		
     private String url;
     private String username;
     private String password;
     
-    public DBConnection() {
-    	this.url = "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.211.180)(PORT = 1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=pdb1)))";
-    	this.username = "personal";
-    	this.password = "oracle";
+    public DBConnection(ConfigProperties config) {
+    	this.url = config.getUrl();
+    	this.username = config.getUsername();
+    	this.password = config.getPassword();
     }
     
     private Connection getConnection() throws Exception {

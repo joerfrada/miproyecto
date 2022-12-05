@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dboraclelab.entidades.*;
+import com.dboraclelab.configuration.ConfigProperties;
+import com.dboraclelab.entidades.Cliente;
+import com.dboraclelab.entidades.MensajeEntity;
+import com.dboraclelab.entidades.RequestEntity;
 import com.dboraclelab.servicios.IClienteManager;
 
 @RestController()
@@ -18,10 +21,15 @@ public class ClienteController {
 	@Autowired
 	private IClienteManager cliMgr;
 	
+	@Autowired
+	private ConfigProperties config;
+	
 	@GetMapping(value = "/getClientes")
 	public MensajeEntity getClientes() {
 		MensajeEntity msg = new MensajeEntity();		
 		List<Cliente> clientes = null;
+		
+		cliMgr.setDBConnection(config);
 		
 		try {
 			clientes = cliMgr.getClientes();
@@ -41,6 +49,8 @@ public class ClienteController {
 		MensajeEntity msg = new MensajeEntity();
 		List<Cliente> clientes = null;
 		
+		cliMgr.setDBConnection(config);
+		
 		try {
 			clientes = cliMgr.getClientesById(request.getId());
 			
@@ -59,7 +69,7 @@ public class ClienteController {
 		
 		try
 		{
-			int id = cliMgr.crudClientes(request, "C");
+			long id = cliMgr.crudClientes(request, "C");
 			
 			msg.set(MensajeEntity.SUCCESS, "El cliente ha guardado exitosamente.", null, id);
 		}
@@ -73,6 +83,8 @@ public class ClienteController {
 	@PostMapping(value = "/actualizarClientes", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public MensajeEntity actualizarClientes(@RequestBody Cliente request) {
 		MensajeEntity msg = new MensajeEntity();
+		
+		cliMgr.setDBConnection(config);
 		
 		try
 		{

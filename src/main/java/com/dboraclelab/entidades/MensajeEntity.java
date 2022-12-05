@@ -21,11 +21,11 @@ public class MensajeEntity {
 	private Object result;
 	
 	@JsonProperty("id")
-	private int id;
+	private long id;
 	
 	public MensajeEntity() {}
 	
-	public void set(int tipo, String mensaje, Object result, int id) {
+	public void set(int tipo, String mensaje, Object result, long id) {
 		this.tipo = tipo;
 		this.mensaje = mensaje;
 		this.result = result;

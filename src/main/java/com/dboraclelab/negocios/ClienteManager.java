@@ -10,14 +10,16 @@ import com.dboraclelab.entidades.Cliente;
 import com.dboraclelab.jdbc.OracleTypes;
 import com.dboraclelab.servicios.IClienteManager;
 
+import com.dboraclelab.configuration.ConfigProperties;
+
 @Service
 public class ClienteManager implements IClienteManager {
 
 	private DBConnection db = null;
 	
-	public ClienteManager() {
+	public void setDBConnection(ConfigProperties config) {
 		if (this.db == null)
-			this.db = new DBConnection(); 
+			this.db = new DBConnection(config);
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class ClienteManager implements IClienteManager {
             
             while (rs.next()) {
             	Cliente cliente = new Cliente();
-            	cliente.setCliente_id(rs.getInt("cliente_id"));
+            	cliente.setCliente_id(rs.getLong("cliente_id"));
             	cliente.setNombres(rs.getString("nombres"));
             	cliente.setApellidos(rs.getString("apellidos"));
             	cliente.setActivo(rs.getBoolean("activo"));
@@ -52,7 +54,7 @@ public class ClienteManager implements IClienteManager {
 	}
 
 	@Override
-	public List<Cliente> getClientesById(int id) throws Exception {
+	public List<Cliente> getClientesById(long id) throws Exception {
 		ArrayList<Cliente> lstClientes = new ArrayList<Cliente>();
 		
 		try
@@ -60,7 +62,7 @@ public class ClienteManager implements IClienteManager {
 			String sqlProc = "pq_api_clientes.pr_get_ad_clientes_by_id(?,?)";
             
             CallableStatement stmt = db.ExecuteProcedure(sqlProc);
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
             stmt.registerOutParameter(2, OracleTypes.CURSOR);
             stmt.execute();
             
@@ -68,7 +70,7 @@ public class ClienteManager implements IClienteManager {
             
             while (rs.next()) {
             	Cliente cliente = new Cliente();
-            	cliente.setCliente_id(rs.getInt("cliente_id"));
+            	cliente.setCliente_id(rs.getLong("cliente_id"));
             	cliente.setNombres(rs.getString("nombres"));
             	cliente.setApellidos(rs.getString("apellidos"));
             	cliente.setActivo(rs.getBoolean("activo"));
@@ -84,8 +86,8 @@ public class ClienteManager implements IClienteManager {
 	}
 
 	@Override
-	public int crudClientes(Cliente request, String evento) throws Exception {
-		int res = 0;
+	public long crudClientes(Cliente request, String evento) throws Exception {
+		long res = 0;
 		
 		try
 		{
@@ -94,13 +96,13 @@ public class ClienteManager implements IClienteManager {
 			CallableStatement stmt = db.ExecuteProcedure(sqlProc);
 			stmt.setString(1, evento);
 			stmt.registerOutParameter(2, OracleTypes.NUMBER);
-			stmt.setInt(2, request.getCliente_id());
+			stmt.setLong(2, request.getCliente_id());
 			stmt.setString(3, request.getNombres());
 			stmt.setString(4, request.getApellidos());
 			stmt.setString(5, request.getActivo() == true ? "true" : "false");
 			stmt.execute();
 			
-			res = stmt.getInt(2);
+			res = stmt.getLong(2);
 		}
 		catch (Exception ex) {
 			throw new Exception("ClienteManager - crudClientes: " + ex.getMessage());
